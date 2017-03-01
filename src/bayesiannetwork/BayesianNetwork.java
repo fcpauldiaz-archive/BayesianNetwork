@@ -33,7 +33,7 @@ public class BayesianNetwork {
 
         in = manager.leerArchivo(inputFile);
 
-
+        System.out.println(in);
         CharStream cs =  new ANTLRInputStream(in);
 
         BayesGrammarLexer lexer = new BayesGrammarLexer(cs);

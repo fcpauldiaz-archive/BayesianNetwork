@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Universidad del Valle de Guatemala
+ * 01/03/2017
+ * Simle grammar for bayesian expressions
  */
 
 grammar BayesGrammar;
@@ -9,7 +9,8 @@ grammar BayesGrammar;
 
 fragment LETTER : ('a'..'z'|'A'..'Z') ;
 
-TOKEN: '!' LETTER ('!' LETTER)*;
+NEGATION: '!';
+TOKEN:   LETTER  (',')?;
 
 WS : 
     [\t\r\n\f ]+ -> skip
@@ -21,10 +22,15 @@ COMMENT
         ) -> skip
     ;								
 
-
 //PARSER
-
-
 program
-	: '(' TOKEN '|' TOKEN* ')'
+	: 'P' '(' op (condition  op)?  ')'
 	;
+
+condition: ('|'); 
+negation: NEGATION;
+operator: negation? TOKEN ;
+op: operator* ;
+
+
+
