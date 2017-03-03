@@ -12,17 +12,11 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface BayesGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link BayesGrammarParser#op2}.
+	 * Visit a parse tree produced by {@link BayesGrammarParser#op}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitOp2(@NotNull BayesGrammarParser.Op2Context ctx);
-	/**
-	 * Visit a parse tree produced by {@link BayesGrammarParser#op1}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOp1(@NotNull BayesGrammarParser.Op1Context ctx);
+	T visitOp(@NotNull BayesGrammarParser.OpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BayesGrammarParser#condition}.
 	 * @param ctx the parse tree
@@ -41,4 +35,10 @@ public interface BayesGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProgram(@NotNull BayesGrammarParser.ProgramContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BayesGrammarParser#operator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOperator(@NotNull BayesGrammarParser.OperatorContext ctx);
 }

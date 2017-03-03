@@ -17,15 +17,17 @@ public class BayesGrammarParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__4=1, T__3=2, T__2=3, T__1=4, T__0=5, TOKEN=6, WS=7, COMMENT=8;
+		T__3=1, T__2=2, T__1=3, T__0=4, NEGATION=5, TOKEN=6, NUM=7, EQUALS=8, 
+		WS=9, COMMENT=10;
 	public static final String[] tokenNames = {
-		"<INVALID>", "'P'", "'!'", "'('", "')'", "'|'", "TOKEN", "WS", "COMMENT"
+		"<INVALID>", "'P'", "'('", "')'", "'|'", "'!'", "TOKEN", "NUM", "'='", 
+		"WS", "COMMENT"
 	};
 	public static final int
-		RULE_program = 0, RULE_condition = 1, RULE_negation = 2, RULE_op1 = 3, 
-		RULE_op2 = 4;
+		RULE_program = 0, RULE_condition = 1, RULE_negation = 2, RULE_operator = 3, 
+		RULE_op = 4;
 	public static final String[] ruleNames = {
-		"program", "condition", "negation", "op1", "op2"
+		"program", "condition", "negation", "operator", "op"
 	};
 
 	@Override
@@ -48,12 +50,14 @@ public class BayesGrammarParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class ProgramContext extends ParserRuleContext {
-		public Op1Context op1() {
-			return getRuleContext(Op1Context.class,0);
+		public OpContext op(int i) {
+			return getRuleContext(OpContext.class,i);
 		}
-		public Op2Context op2() {
-			return getRuleContext(Op2Context.class,0);
+		public TerminalNode EQUALS() { return getToken(BayesGrammarParser.EQUALS, 0); }
+		public List<OpContext> op() {
+			return getRuleContexts(OpContext.class);
 		}
+		public TerminalNode NUM() { return getToken(BayesGrammarParser.NUM, 0); }
 		public ConditionContext condition() {
 			return getRuleContext(ConditionContext.class,0);
 		}
@@ -75,19 +79,21 @@ public class BayesGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(10); match(T__4);
+			setState(10); match(T__3);
 			setState(11); match(T__2);
-			setState(12); op1();
+			setState(12); op();
 			setState(16);
 			_la = _input.LA(1);
 			if (_la==T__0) {
 				{
 				setState(13); condition();
-				setState(14); op2();
+				setState(14); op();
 				}
 			}
 
 			setState(18); match(T__1);
+			setState(19); match(EQUALS);
+			setState(20); match(NUM);
 			}
 		}
 		catch (RecognitionException re) {
@@ -120,7 +126,7 @@ public class BayesGrammarParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(20); match(T__0);
+			setState(22); match(T__0);
 			}
 			}
 		}
@@ -136,6 +142,7 @@ public class BayesGrammarParser extends Parser {
 	}
 
 	public static class NegationContext extends ParserRuleContext {
+		public TerminalNode NEGATION() { return getToken(BayesGrammarParser.NEGATION, 0); }
 		public NegationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -153,7 +160,7 @@ public class BayesGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(22); match(T__3);
+			setState(24); match(NEGATION);
 			}
 		}
 		catch (RecognitionException re) {
@@ -167,53 +174,38 @@ public class BayesGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Op1Context extends ParserRuleContext {
+	public static class OperatorContext extends ParserRuleContext {
 		public NegationContext negation() {
 			return getRuleContext(NegationContext.class,0);
 		}
-		public TerminalNode TOKEN(int i) {
-			return getToken(BayesGrammarParser.TOKEN, i);
-		}
-		public List<TerminalNode> TOKEN() { return getTokens(BayesGrammarParser.TOKEN); }
-		public Op1Context(ParserRuleContext parent, int invokingState) {
+		public TerminalNode TOKEN() { return getToken(BayesGrammarParser.TOKEN, 0); }
+		public OperatorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_op1; }
+		@Override public int getRuleIndex() { return RULE_operator; }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof BayesGrammarVisitor ) return ((BayesGrammarVisitor<? extends T>)visitor).visitOp1(this);
+			if ( visitor instanceof BayesGrammarVisitor ) return ((BayesGrammarVisitor<? extends T>)visitor).visitOperator(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final Op1Context op1() throws RecognitionException {
-		Op1Context _localctx = new Op1Context(_ctx, getState());
-		enterRule(_localctx, 6, RULE_op1);
+	public final OperatorContext operator() throws RecognitionException {
+		OperatorContext _localctx = new OperatorContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_operator);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(25);
+			setState(27);
 			_la = _input.LA(1);
-			if (_la==T__3) {
+			if (_la==NEGATION) {
 				{
-				setState(24); negation();
+				setState(26); negation();
 				}
 			}
 
-			setState(30);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==TOKEN) {
-				{
-				{
-				setState(27); match(TOKEN);
-				}
-				}
-				setState(32);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
+			setState(29); match(TOKEN);
 			}
 		}
 		catch (RecognitionException re) {
@@ -227,50 +219,41 @@ public class BayesGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Op2Context extends ParserRuleContext {
-		public NegationContext negation() {
-			return getRuleContext(NegationContext.class,0);
+	public static class OpContext extends ParserRuleContext {
+		public OperatorContext operator(int i) {
+			return getRuleContext(OperatorContext.class,i);
 		}
-		public TerminalNode TOKEN(int i) {
-			return getToken(BayesGrammarParser.TOKEN, i);
+		public List<OperatorContext> operator() {
+			return getRuleContexts(OperatorContext.class);
 		}
-		public List<TerminalNode> TOKEN() { return getTokens(BayesGrammarParser.TOKEN); }
-		public Op2Context(ParserRuleContext parent, int invokingState) {
+		public OpContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_op2; }
+		@Override public int getRuleIndex() { return RULE_op; }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof BayesGrammarVisitor ) return ((BayesGrammarVisitor<? extends T>)visitor).visitOp2(this);
+			if ( visitor instanceof BayesGrammarVisitor ) return ((BayesGrammarVisitor<? extends T>)visitor).visitOp(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final Op2Context op2() throws RecognitionException {
-		Op2Context _localctx = new Op2Context(_ctx, getState());
-		enterRule(_localctx, 8, RULE_op2);
+	public final OpContext op() throws RecognitionException {
+		OpContext _localctx = new OpContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_op);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(34);
-			_la = _input.LA(1);
-			if (_la==T__3) {
-				{
-				setState(33); negation();
-				}
-			}
-
-			setState(39);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==TOKEN) {
+			while (_la==NEGATION || _la==TOKEN) {
 				{
 				{
-				setState(36); match(TOKEN);
+				setState(31); operator();
 				}
 				}
-				setState(41);
+				setState(36);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -288,18 +271,17 @@ public class BayesGrammarParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\n-\4\2\t\2\4\3\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\f(\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\3\2\3\2\3\2\3\2\3\2\3\2\5\2\23\n\2\3\2\3\2"+
-		"\3\3\3\3\3\4\3\4\3\5\5\5\34\n\5\3\5\7\5\37\n\5\f\5\16\5\"\13\5\3\6\5\6"+
-		"%\n\6\3\6\7\6(\n\6\f\6\16\6+\13\6\3\6\2\2\7\2\4\6\b\n\2\2,\2\f\3\2\2\2"+
-		"\4\26\3\2\2\2\6\30\3\2\2\2\b\33\3\2\2\2\n$\3\2\2\2\f\r\7\3\2\2\r\16\7"+
-		"\5\2\2\16\22\5\b\5\2\17\20\5\4\3\2\20\21\5\n\6\2\21\23\3\2\2\2\22\17\3"+
-		"\2\2\2\22\23\3\2\2\2\23\24\3\2\2\2\24\25\7\6\2\2\25\3\3\2\2\2\26\27\7"+
-		"\7\2\2\27\5\3\2\2\2\30\31\7\4\2\2\31\7\3\2\2\2\32\34\5\6\4\2\33\32\3\2"+
-		"\2\2\33\34\3\2\2\2\34 \3\2\2\2\35\37\7\b\2\2\36\35\3\2\2\2\37\"\3\2\2"+
-		"\2 \36\3\2\2\2 !\3\2\2\2!\t\3\2\2\2\" \3\2\2\2#%\5\6\4\2$#\3\2\2\2$%\3"+
-		"\2\2\2%)\3\2\2\2&(\7\b\2\2\'&\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*"+
-		"\13\3\2\2\2+)\3\2\2\2\7\22\33 $)";
+		"\3\2\3\2\3\3\3\3\3\4\3\4\3\5\5\5\36\n\5\3\5\3\5\3\6\7\6#\n\6\f\6\16\6"+
+		"&\13\6\3\6\2\2\7\2\4\6\b\n\2\2%\2\f\3\2\2\2\4\30\3\2\2\2\6\32\3\2\2\2"+
+		"\b\35\3\2\2\2\n$\3\2\2\2\f\r\7\3\2\2\r\16\7\4\2\2\16\22\5\n\6\2\17\20"+
+		"\5\4\3\2\20\21\5\n\6\2\21\23\3\2\2\2\22\17\3\2\2\2\22\23\3\2\2\2\23\24"+
+		"\3\2\2\2\24\25\7\5\2\2\25\26\7\n\2\2\26\27\7\t\2\2\27\3\3\2\2\2\30\31"+
+		"\7\6\2\2\31\5\3\2\2\2\32\33\7\7\2\2\33\7\3\2\2\2\34\36\5\6\4\2\35\34\3"+
+		"\2\2\2\35\36\3\2\2\2\36\37\3\2\2\2\37 \7\b\2\2 \t\3\2\2\2!#\5\b\5\2\""+
+		"!\3\2\2\2#&\3\2\2\2$\"\3\2\2\2$%\3\2\2\2%\13\3\2\2\2&$\3\2\2\2\5\22\35"+
+		"$";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

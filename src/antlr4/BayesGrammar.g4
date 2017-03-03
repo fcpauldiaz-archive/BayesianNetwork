@@ -8,9 +8,13 @@ grammar BayesGrammar;
 
 
 fragment LETTER : ('a'..'z'|'A'..'Z') ;
+fragment DIGIT :'0'..'9' ;
 
 NEGATION: '!';
 TOKEN:   LETTER  (',')?;
+NUM : DIGIT ('.'? DIGIT* )?
+;
+EQUALS: '=';
 
 WS : 
     [\t\r\n\f ]+ -> skip
@@ -24,7 +28,7 @@ COMMENT
 
 //PARSER
 program
-	: 'P' '(' op (condition  op)?  ')'
+	: 'P' '(' op (condition  op)?  ')' EQUALS NUM
 	;
 
 condition: ('|'); 
