@@ -81,10 +81,11 @@ public class BayesStructureVisitor extends BayesGrammarBaseVisitor {
     }
 
 
-    public void getStructure() {
+    public ArrayList<Node> getStructure() {
         for (int i = 0; i < this.bayesStructure.size(); i++) {
             System.out.println(this.bayesStructure.get(i).printNode());
         }
+        return this.bayesStructure;
     } 
     
     public String totalExpression() {
@@ -95,7 +96,7 @@ public class BayesStructureVisitor extends BayesGrammarBaseVisitor {
             tmp = tmp.replace("!", "");
             if (!expressions.contains(tmp)) {
                 expressions.add(tmp);
-                exp += tmp;
+                exp += ":"+tmp;
             }
             
         }

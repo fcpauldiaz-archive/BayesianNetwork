@@ -148,6 +148,5 @@ public class BayesVisitor extends BayesGrammarBaseVisitor {
         return cant;
     }
     
-    
 
 }

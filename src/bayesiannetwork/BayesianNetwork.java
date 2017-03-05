@@ -11,10 +11,10 @@ import org.antlr.v4.runtime.CharStream;
 import antlr4.BayesGrammarLexer;
 import org.antlr.v4.runtime.CommonTokenStream;
 import antlr4.BayesGrammarParser;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
 import org.antlr.v4.runtime.tree.ParseTree;
-
 /**
  *
  * @author SDX
@@ -55,16 +55,27 @@ public class BayesianNetwork {
             visitor.visit(tree);
             BayesStructureVisitor structure = new BayesStructureVisitor();
             structure.visit(tree);
-            
+            String pTotal = structure.totalExpression();
+            structure.completeTable();
+            System.out.println(pTotal + " pTotal");
+            System.out.println("");
             boolean valid = manager.getCantLines() == visitor.validateNetwork();
-            System.out.println(visitor.getNetwork());
-            structure.getStructure();
+            ArrayList<Node> network = visitor.getNetwork();
+            ArrayList<Node> completeNetwork = structure.getStructure();
             if (valid) {
                 while (true) {
                     Scanner keyboard = new Scanner(System.in);
                     System.out.println("");
                     System.out.println("Enter expression: ");
-                    String expression = keyboard.nextLine();
+                    // Con caja de texto
+                    String expression = JOptionPane.showInputDialog(
+                       null,
+                       "Expression to evaluate",
+                       "",
+                       JOptionPane.QUESTION_MESSAGE);  // el icono sera un iterrogante
+                    
+                    
+                    expression = expression.toUpperCase();
                     cs =  new ANTLRInputStream(expression);
                     lexer = new BayesGrammarLexer(cs);
                     tokens = new CommonTokenStream( lexer);
@@ -73,11 +84,16 @@ public class BayesianNetwork {
                     tree = context;
                     errorsCount = parser.getNumberOfSyntaxErrors();
                     if (errorsCount > 0) {
-                        System.out.println("error");
+                        JOptionPane.showMessageDialog(null, "Expresión mal ingresada", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                    EnumerationVisitor enumeration = new EnumerationVisitor();
-                    enumeration.visit(tree);
+                    else {
+                        EnumerationVisitor enumeration = new EnumerationVisitor();
+                        enumeration.visit(tree);
+                        enumeration.getHiddenVars(network);
+                        double answer = enumeration.enumerate(pTotal, completeNetwork);
+                        JOptionPane.showMessageDialog(null, expression+" = "+answer);
                     
+                    }
                 }
             }
         }
