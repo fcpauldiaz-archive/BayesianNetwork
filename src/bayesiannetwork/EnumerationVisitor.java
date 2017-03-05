@@ -282,6 +282,32 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
         return prob;
     }
     
+    public String includeExpression(String pTotal, String expression) {
+        expression = expression.replaceAll("\\s+","");
+        ArrayList<String> negated = new ArrayList();
+        for (int i = 0; i < expression.length(); i++) {
+            char ch = expression.charAt(i);
+            if (ch == '!' && i < expression.length()-1) {
+                negated.add("!" + expression.charAt(i+1));
+            }
+        }
+        String newExpression = "";
+        for (int i = 0; i < pTotal.length(); i++) {
+            char ch = pTotal.charAt(i);
+            String newVar = "";
+            for (int j = 0; j < negated.size(); j++) {
+               String neg = negated.get(j);
+               neg = neg.replace("!", "");
+               if (ch == neg.toCharArray()[0]) {
+                   newVar = "!";
+               }
+            }
+            newExpression += newVar + ch;
+        }
+        return newExpression;
+        
+    }
+    
     
     
 

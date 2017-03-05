@@ -64,7 +64,6 @@ public class BayesianNetwork {
             ArrayList<Node> completeNetwork = structure.getStructure();
             if (valid) {
                 while (true) {
-                    Scanner keyboard = new Scanner(System.in);
                     System.out.println("");
                     System.out.println("Enter expression: ");
                     // Con caja de texto
@@ -90,6 +89,7 @@ public class BayesianNetwork {
                         EnumerationVisitor enumeration = new EnumerationVisitor();
                         enumeration.visit(tree);
                         enumeration.getHiddenVars(network);
+                        pTotal = enumeration.includeExpression(pTotal, expression);
                         double answer = enumeration.enumerate(pTotal, completeNetwork);
                         JOptionPane.showMessageDialog(null, expression+" = "+answer);
                     
