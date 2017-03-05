@@ -32,20 +32,15 @@ public class BayesVisitor extends BayesGrammarBaseVisitor {
 
     @Override
     public Object visitOperator(BayesGrammarParser.OperatorContext ctx) {
-        for (int i = 0; i < ctx.getChildCount(); i++){
+        for (int i = 0; i < ctx.getChildCount(); i++) {
             String child = ctx.getChild(i).getText();
             if (!child.equals(",") && !child.equals("!")) {
                 //System.out.println(child);
-              
                     currentNode = new Node(child);
                     currentId = child;
                     if (!this.bayesNetwork.contains(currentNode))
                         this.bayesNetwork.add(currentNode);
-                
-                
             }
-           
-            
         }
         return super.visitOperator(ctx); //To change body of generated methods, choose Tools | Templates.
     }
