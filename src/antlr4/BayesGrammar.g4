@@ -11,9 +11,8 @@ fragment LETTER : ('a'..'z'|'A'..'Z') ;
 fragment DIGIT :'0'..'9' ;
 
 NEGATION: '!';
-TOKEN:   LETTER  (',')?;
-NUM : DIGIT ('.'? DIGIT* )?
-;
+TOKEN:   LETTER  ;
+NUM : DIGIT ('.'? DIGIT* )? ;
 EQUALS: '=';
 
 WS : 
@@ -25,16 +24,20 @@ COMMENT
         | '/*' .*? '*/'	
         ) -> skip
     ;								
-
+    
 //PARSER
 program
-	: 'P' '(' op (condition  op)?  ')' EQUALS NUM
+	: probability+
 	;
+probability
+        : 'P' '(' op (condition  op2)?  ')' EQUALS number
+        ;
+number: NUM;
 
 condition: ('|'); 
 negation: NEGATION;
-operator: negation? TOKEN ;
+operator: negation? TOKEN (',')?;
 op: operator* ;
-
-
+op2: operator2*;
+operator2: negation? TOKEN (',')?;
 

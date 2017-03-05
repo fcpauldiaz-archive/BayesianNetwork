@@ -17,7 +17,8 @@ import java.io.IOException;
  */
 public class FileManager {
     
-     
+    private int cantLines = 0;
+    
     public String leerArchivo(File inputFile){
       
         int contador=0;
@@ -36,6 +37,9 @@ public class FileManager {
                while ((sCurrentLine = br.readLine()) != null) {
                     
                     input+=sCurrentLine+"\n";
+                    if (!sCurrentLine.isEmpty() && !sCurrentLine.contains("/")){
+                        cantLines++;
+                    }
                 
                 }
              
@@ -55,5 +59,11 @@ public class FileManager {
         return null;
         
     }
+
+    public int getCantLines() {
+        return cantLines;
+    }
+    
+     
 
 }

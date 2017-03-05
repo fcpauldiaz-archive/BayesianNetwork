@@ -29,15 +29,15 @@ public class BayesianNetwork {
         // TODO code application logic here
         File inputFile = new File("input.txt");
         FileManager manager = new FileManager();
-        String in = "";
+        String in;
 
         in = manager.leerArchivo(inputFile);
 
-        System.out.println(in);
+        //System.out.println(in);
         CharStream cs =  new ANTLRInputStream(in);
 
         BayesGrammarLexer lexer = new BayesGrammarLexer(cs);
-        lexer.removeErrorListeners();
+        //lexer.removeErrorListeners();
 
         CommonTokenStream tokens = new CommonTokenStream( lexer);
         BayesGrammarParser  parser = new BayesGrammarParser(tokens);
@@ -45,14 +45,15 @@ public class BayesianNetwork {
         ParseTree tree = contexto;
 
             
-        parser.removeErrorListeners();
 
         int errorsCount = parser.getNumberOfSyntaxErrors();
         System.out.println(errorsCount);
         if(errorsCount == 0){
             System.out.println("Parseo Exitoso");
-            BayesVisitor vistor = new BayesVisitor();
-            vistor.visit(tree);
+            BayesVisitor visitor = new BayesVisitor();
+            visitor.visit(tree);
+            System.out.println(manager.getCantLines() == visitor.validateNetwork());
+            System.out.println(visitor.getNetwork());
         }
     }
     
