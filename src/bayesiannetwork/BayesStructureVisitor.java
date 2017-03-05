@@ -82,15 +82,29 @@ public class BayesStructureVisitor extends BayesGrammarBaseVisitor {
 
 
     public void getStructure() {
-        for (int i = 0; i < this.bayesStructure.size(); i++){
+        for (int i = 0; i < this.bayesStructure.size(); i++) {
             System.out.println(this.bayesStructure.get(i).printNode());
         }
     } 
     
+    public String totalExpression() {
+        String exp = "";
+        ArrayList<String> expressions = new ArrayList();
+        for (Node node : this.bayesStructure) {
+            String tmp = node.getExpression();
+            tmp = tmp.replace("!", "");
+            if (!expressions.contains(tmp)) {
+                expressions.add(tmp);
+                exp += tmp;
+            }
+            
+        }
+        return exp;
+    }
+    
     public void completeTable() {
         ArrayList<Node> complete = new ArrayList();
-        for (int i = 0; i < this.bayesStructure.size(); i++){
-            Node node = this.bayesStructure.get(i);
+        for (Node node : this.bayesStructure) {
             String expression = node.getExpression();
             int indexFirst = expression.indexOf("(") + 1;
             Node newNode = new Node("P(!"+expression.substring(indexFirst, expression.length()), 1-node.getProbability());
