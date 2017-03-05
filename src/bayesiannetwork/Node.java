@@ -17,12 +17,20 @@ public class Node  {
 
     private String id;
     private ArrayList<Node> precedence;
+    private float probability;
+    private String expression;
 
     public Node(String id) {
         this.precedence = new ArrayList();
         this.id = id;
     }
 
+    public Node( String expression, float probability) {
+        this.probability = probability;
+        this.expression = expression;
+    }
+
+    
     public String getId() {
         return id;
     }
@@ -44,7 +52,13 @@ public class Node  {
     public boolean equals(Object o) {
         if (o == null) return false;
         Node node = (Node)o;
-        return this.id.equals(node.getId());
+        if (this.expression == null || node.getExpression() == null) {
+            return this.id.equals(node.getId());
+        }
+        if (this.id == null ) {
+            return this.expression.equals(node.getExpression());
+        }
+        return this.id.equals(node.getId()); 
     }
 
     @Override
@@ -54,11 +68,33 @@ public class Node  {
         return hash;
     }
 
+    public float getProbability() {
+        return probability;
+    }
+
+    public void setProbability(float probability) {
+        this.probability = probability;
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
+
+    public String printNode() {
+        return "Node{" + "probability=" + probability + ", expression=" + expression + '}';
+    }
+
+    
     @Override
     public String toString() {
         return "Node{" + "id=" + id + ", precedence=" + precedence + '}';
     }
 
+    
    
     
     

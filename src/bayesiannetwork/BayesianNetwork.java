@@ -53,9 +53,12 @@ public class BayesianNetwork {
             System.out.println("Parseo Exitoso");
             BayesVisitor visitor = new BayesVisitor();
             visitor.visit(tree);
+            BayesStructureVisitor structure = new BayesStructureVisitor();
+            structure.visit(tree);
             
             boolean valid = manager.getCantLines() == visitor.validateNetwork();
             System.out.println(visitor.getNetwork());
+            structure.getStructure();
             if (valid) {
                 while (true) {
                     Scanner keyboard = new Scanner(System.in);
