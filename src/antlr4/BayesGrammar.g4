@@ -41,3 +41,8 @@ op: operator* ;
 op2: operator2*;
 operator2: negation? TOKEN (',')?;
 
+cliBayes: expression+
+	;
+expression
+        : 'P' '(' op (condition  op2)?  ')'
+        ;

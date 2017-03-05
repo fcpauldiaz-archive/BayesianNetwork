@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.CharStream;
 import antlr4.BayesGrammarLexer;
 import org.antlr.v4.runtime.CommonTokenStream;
 import antlr4.BayesGrammarParser;
+import java.util.Scanner;
 import javax.swing.JOptionPane;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -52,8 +53,30 @@ public class BayesianNetwork {
             System.out.println("Parseo Exitoso");
             BayesVisitor visitor = new BayesVisitor();
             visitor.visit(tree);
-            System.out.println(manager.getCantLines() == visitor.validateNetwork());
+            
+            boolean valid = manager.getCantLines() == visitor.validateNetwork();
             System.out.println(visitor.getNetwork());
+            if (valid) {
+                while (true) {
+                    Scanner keyboard = new Scanner(System.in);
+                    System.out.println("");
+                    System.out.println("Enter expression: ");
+                    String expression = keyboard.nextLine();
+                    cs =  new ANTLRInputStream(expression);
+                    lexer = new BayesGrammarLexer(cs);
+                    tokens = new CommonTokenStream( lexer);
+                    parser = new BayesGrammarParser(tokens);
+                    BayesGrammarParser.CliBayesContext context = parser.cliBayes();
+                    tree = context;
+                    errorsCount = parser.getNumberOfSyntaxErrors();
+                    if (errorsCount > 0) {
+                        System.out.println("error");
+                    }
+                    EnumerationVisitor enumeration = new EnumerationVisitor();
+                    enumeration.visit(tree);
+                    
+                }
+            }
         }
     }
     

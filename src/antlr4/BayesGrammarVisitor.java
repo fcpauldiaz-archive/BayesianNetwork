@@ -42,6 +42,12 @@ public interface BayesGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNegation(@NotNull BayesGrammarParser.NegationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BayesGrammarParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpression(@NotNull BayesGrammarParser.ExpressionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BayesGrammarParser#operator2}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -53,6 +59,12 @@ public interface BayesGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProbability(@NotNull BayesGrammarParser.ProbabilityContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BayesGrammarParser#cliBayes}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCliBayes(@NotNull BayesGrammarParser.CliBayesContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BayesGrammarParser#program}.
 	 * @param ctx the parse tree
