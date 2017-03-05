@@ -9,7 +9,6 @@ package bayesiannetwork;
 import antlr4.BayesGrammarBaseVisitor;
 import antlr4.BayesGrammarParser;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  *
@@ -17,7 +16,7 @@ import java.util.HashSet;
  */
 public class BayesStructureVisitor extends BayesGrammarBaseVisitor {
     
-    private final ArrayList<Node> bayesStructure;
+    private ArrayList<Node> bayesStructure;
     private Node currentNode;
     
     public BayesStructureVisitor() {
@@ -87,6 +86,19 @@ public class BayesStructureVisitor extends BayesGrammarBaseVisitor {
             System.out.println(this.bayesStructure.get(i).printNode());
         }
     } 
+    
+    public void completeTable() {
+        ArrayList<Node> complete = new ArrayList();
+        for (int i = 0; i < this.bayesStructure.size(); i++){
+            Node node = this.bayesStructure.get(i);
+            String expression = node.getExpression();
+            int indexFirst = expression.indexOf("(") + 1;
+            Node newNode = new Node("P(!"+expression.substring(indexFirst, expression.length()), 1-node.getProbability());
+            
+            complete.add(node); complete.add(newNode);
+        }
+        this.bayesStructure = complete;
+    }
     
 
 }
