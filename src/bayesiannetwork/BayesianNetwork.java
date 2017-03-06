@@ -12,7 +12,6 @@ import antlr4.BayesGrammarLexer;
 import org.antlr.v4.runtime.CommonTokenStream;
 import antlr4.BayesGrammarParser;
 import java.util.ArrayList;
-import java.util.Scanner;
 import javax.swing.JOptionPane;
 import org.antlr.v4.runtime.tree.ParseTree;
 /**
@@ -21,7 +20,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public class BayesianNetwork {
 
-    public static int idNumber = 0;
     
     /**
      * @param args the command line arguments
@@ -61,7 +59,7 @@ public class BayesianNetwork {
             System.out.println("");
             boolean valid = manager.getCantLines() == visitor.validateNetwork();
             System.out.println(visitor.getNetwork());
-            GraphViz graph = new GraphViz(visitor.getNetwork());
+            GraphViz graphViz = new GraphViz(visitor.getNetwork());
             ArrayList<Node> network = visitor.getNetwork();
             ArrayList<Node> completeNetwork = structure.getStructure();
             if (valid) {

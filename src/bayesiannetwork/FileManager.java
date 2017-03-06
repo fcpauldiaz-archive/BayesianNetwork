@@ -21,8 +21,6 @@ public class FileManager {
     
     public String leerArchivo(File inputFile){
       
-        int contador=0;
-        int tamaño=0;
         String input=" ";
         BufferedReader br = null;
  

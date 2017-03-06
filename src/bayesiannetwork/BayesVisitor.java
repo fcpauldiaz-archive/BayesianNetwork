@@ -36,9 +36,7 @@ public class BayesVisitor extends BayesGrammarBaseVisitor {
             String child = ctx.getChild(i).getText();
             if (!child.equals(",") && !child.equals("!")) {
                 //System.out.println(child);
-                    currentNode = new Node(child, BayesianNetwork.idNumber, "");
-                    BayesianNetwork.idNumber += 1;
-                    System.out.println("identifiers" + BayesianNetwork.idNumber);
+                    currentNode = new Node(child);
                     currentId = child;
                     if (!this.bayesNetwork.contains(currentNode))
                         this.bayesNetwork.add(currentNode);
