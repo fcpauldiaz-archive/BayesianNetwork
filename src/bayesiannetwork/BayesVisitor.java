@@ -148,5 +148,18 @@ public class BayesVisitor extends BayesGrammarBaseVisitor {
         return cant;
     }
     
+    public boolean validateUnique(String n) {
+        boolean valid = true;
+        String[] var = n.split("\\n");
+        for (int i = 0; i < var.length; i ++) {
+            String str1 = var[i];
+           for (int j = 0; j < var.length; j++) {
+               if (str1.equals(var[j]) && j != i && !str1.contains("//") && !str1.isEmpty()) {
+                   valid = false;
+               }
+           }
+        }
+        return valid;
+    }
 
 }

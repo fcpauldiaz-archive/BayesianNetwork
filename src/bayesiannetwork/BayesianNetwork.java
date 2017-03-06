@@ -58,11 +58,12 @@ public class BayesianNetwork {
             System.out.println(pTotal + " pTotal");
             System.out.println("");
             boolean valid = manager.getCantLines() == visitor.validateNetwork();
+            boolean validR = visitor.validateUnique(in);
             System.out.println(visitor.getNetwork());
             GraphViz graphViz = new GraphViz(visitor.getNetwork());
             ArrayList<Node> network = visitor.getNetwork();
             ArrayList<Node> completeNetwork = structure.getStructure();
-            if (valid) {
+            if (valid && validR) {
                 while (true) {
                     System.out.println("");
                     System.out.println("Enter expression: ");

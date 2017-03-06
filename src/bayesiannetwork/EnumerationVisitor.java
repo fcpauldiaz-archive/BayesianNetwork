@@ -266,6 +266,7 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
      * @return float with the evaluated expression
      */
     public float evaluateExpression(String expression, ArrayList<Node> completeNetwork) {
+        System.out.println(expression);
         String[] arrayExpr = expression.split(":");
         float prob = 1;
         for (int i = 0; i < arrayExpr.length;i++) {
@@ -279,6 +280,7 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
             }
             
         }
+        System.out.println(prob);
         return prob;
     }
     
