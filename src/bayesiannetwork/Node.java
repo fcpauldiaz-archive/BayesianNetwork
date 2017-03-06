@@ -19,10 +19,12 @@ public class Node  {
     private ArrayList<Node> precedence;
     private float probability;
     private String expression;
+    private int idNumber = 0;
 
-    public Node(String id) {
+    public Node(String id, int idNumber, String dummy) {
         this.precedence = new ArrayList();
         this.id = id;
+        this.idNumber = idNumber;
     }
 
     public Node( String expression, float probability) {
@@ -88,11 +90,18 @@ public class Node  {
         return "Node{" + "probability=" + probability + ", expression=" + expression + '}';
     }
 
-    
+    public int getIdNumber() {
+        return idNumber;
+    }
+
     @Override
     public String toString() {
-        return "Node{" + "id=" + id + ", precedence=" + precedence + '}';
+        return "Node{" + "id=" + id + ", precedence=" + precedence + ", idNumber=" + idNumber + '}';
     }
+    
+
+    
+    
 
     
    

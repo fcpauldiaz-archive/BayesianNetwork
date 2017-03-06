@@ -21,7 +21,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public class BayesianNetwork {
 
-
+    public static int idNumber = 0;
     
     /**
      * @param args the command line arguments
@@ -60,6 +60,8 @@ public class BayesianNetwork {
             System.out.println(pTotal + " pTotal");
             System.out.println("");
             boolean valid = manager.getCantLines() == visitor.validateNetwork();
+            System.out.println(visitor.getNetwork());
+            GraphViz graph = new GraphViz(visitor.getNetwork());
             ArrayList<Node> network = visitor.getNetwork();
             ArrayList<Node> completeNetwork = structure.getStructure();
             if (valid) {
