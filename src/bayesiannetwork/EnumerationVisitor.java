@@ -167,23 +167,28 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
        
     }
     
-    public float enumerate(String pTotal, ArrayList<Node> network) {
+    public float enumerate(String pTotal, ArrayList<Node> network, ArrayList<Node> simpleNetwork) {
         System.out.println("");
         String newPTotal = includeExpression(pTotal, this.newExpressionNum);
         //System.out.println("new PTotal 1"  + newPTotal);
-        float res1 = enumerateExpr(newPTotal, network, this.hiddenVarsNum);
+        float res1 = enumerateExpr(newPTotal, network, this.hiddenVarsNum, simpleNetwork, true);
         System.out.println(res1);
         System.out.println("");
         newPTotal = includeExpression(pTotal, this.newExpressionDenom);
         //System.out.println("new PTotal 2"  + newPTotal);
-        float res2 = enumerateExpr(newPTotal, network, this.hiddenVarsDenom);
+        float res2 = enumerateExpr(newPTotal, network, this.hiddenVarsDenom, simpleNetwork, false);
         System.out.println(res2);
         return res1/res2;
     }
     
-    public float enumerateExpr(String expression, ArrayList<Node> completeNetwork, ArrayList<String> variables) {
+    public float enumerateExpr(String expression, ArrayList<Node> completeNetwork, ArrayList<String> variables, ArrayList<Node> network, boolean valid) {
         float resultNum = 0;
         int n = variables.size();
+        //Correción al algoritmo por Kevin García.
+        if (n == 0 && valid == true) {
+            System.out.println("EXP " + expression);
+            return this.evaluateExpression(expression, completeNetwork);
+        }
         for (int i = 0; i < Math.pow(2, n); i++) {
             String bin = Integer.toBinaryString(i);
             while (bin.length() < n)
