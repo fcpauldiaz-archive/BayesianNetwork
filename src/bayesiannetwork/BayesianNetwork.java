@@ -65,38 +65,52 @@ public class BayesianNetwork {
             ArrayList<Node> completeNetwork = structure.getStructure();
             if (valid && validR) {
                 while (true) {
-                    System.out.println("");
-                    System.out.println("Enter expression: ");
-                    // Con caja de texto
-                    String expression = JOptionPane.showInputDialog(
-                       null,
-                       "Expression to evaluate",
-                       "",
-                       JOptionPane.QUESTION_MESSAGE);  // el icono sera un iterrogante
+                    try {
+                        System.out.println("");
                     
-                    
-                    expression = expression.toUpperCase();
-                    cs =  new ANTLRInputStream(expression);
-                    lexer = new BayesGrammarLexer(cs);
-                    tokens = new CommonTokenStream( lexer);
-                    parser = new BayesGrammarParser(tokens);
-                    BayesGrammarParser.CliBayesContext context = parser.cliBayes();
-                    tree = context;
-                    errorsCount = parser.getNumberOfSyntaxErrors();
-                    if (errorsCount > 0) {
-                        JOptionPane.showMessageDialog(null, "Expresión mal ingresada", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                    else {
-                        EnumerationVisitor enumeration = new EnumerationVisitor();
-                        enumeration.visit(tree);
-                        enumeration.getHiddenVars(network);
-                        pTotal = enumeration.includeExpression(pTotal, expression);
-                        double answer = enumeration.enumerate(pTotal, completeNetwork);
-                        JOptionPane.showMessageDialog(null, expression+" = "+answer);
-                    
+                        System.out.println("Enter expression: ");
+                        // Con caja de texto
+                        String expression = JOptionPane.showInputDialog(
+                           null,
+                           "Expression to evaluate",
+                           "",
+                           JOptionPane.QUESTION_MESSAGE);  // el icono sera un iterrogante
+
+
+                        expression = expression.toUpperCase();
+                        cs =  new ANTLRInputStream(expression);
+                        lexer = new BayesGrammarLexer(cs);
+                        tokens = new CommonTokenStream( lexer);
+                        parser = new BayesGrammarParser(tokens);
+                        BayesGrammarParser.CliBayesContext context = parser.cliBayes();
+                        tree = context;
+                        errorsCount = parser.getNumberOfSyntaxErrors();
+                        if (errorsCount > 0) {
+                            JOptionPane.showMessageDialog(null, "Expresión mal ingresada", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                        else {
+                            EnumerationVisitor enumeration = new EnumerationVisitor();
+                            enumeration.visit(tree);
+                            boolean validVars = enumeration.validateExpression(visitor.getNetwork());
+                            if (!validVars) {
+                                JOptionPane.showMessageDialog(null, "Hay una variable no existente", "Error", JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                enumeration.getHiddenVars(network);
+                               // pTotal = enumeration.includeExpression(pTotal, expression);
+                                double answer = enumeration.enumerate(pTotal, completeNetwork);
+                                JOptionPane.showMessageDialog(null, expression+" = "+answer);
+                            }
+
+                        }
+                    } catch(Exception e) {
+                        break;
                     }
                 }
             }
+            else {
+               JOptionPane.showMessageDialog(null, "Error: not valid","",  JOptionPane.ERROR_MESSAGE);
+            }
+            
         }
     }
     

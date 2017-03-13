@@ -28,10 +28,12 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
     private String newExpressionDenom = "";
     private ArrayList<String> hiddenVarsNum;
     private ArrayList<String> hiddenVarsDenom;
+    private ArrayList<String> allVars;
     
     public EnumerationVisitor() {
         this.hiddenVarsDenom = new ArrayList();
         this.hiddenVarsNum = new ArrayList();
+        this.allVars = new ArrayList();
     }
     
     @Override
@@ -46,6 +48,9 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
                 System.out.println();
                 newExpressionNum = "";
                 newExpressionDenom = "";
+                this.allVars = new ArrayList();
+                
+                        
             }
         }
         return super.visitCliBayes(ctx); //To change body of generated methods, choose Tools | Templates.
@@ -68,7 +73,8 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
     public Object visitOperator(BayesGrammarParser.OperatorContext ctx) {
         for (int i = 0; i < ctx.getChildCount(); i++) {
             String child = ctx.getChild(i).getText();
-            
+            String modChild = child.replace(",", "");
+            this.allVars.add(modChild.replace("!", ""));
             //System.out.println(child);
             newExpressionNum += child;     
             
@@ -89,6 +95,7 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
             if (child.contains(",")){
                 child = child.replace(",", "");
             }
+            this.allVars.add(child.replace("!", ""));
             newExpressionNum   += "," + child;          
            
          
@@ -123,11 +130,11 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
     }
     
     public void getHiddenVars(ArrayList<Node> network) {
-        String[] vars = this.newExpressionNum.split(",");
+        String[] vars = this.newExpressionNum.split(",");             
         for (Node nodo : network) {
             boolean found = false;
             for (int j = 0; j < vars.length; j++) {
-                String tmp = vars[j].replace("!", "");
+                String tmp = vars[j].replace("!", "");   
                 if (tmp.equals(nodo.getId())) {
                     found = true;
                 }
@@ -160,34 +167,37 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
        
     }
     
-    public float enumerate(String expression, ArrayList<Node> network) {
-        ArrayList<ArrayList<String>> pairs = new ArrayList();
+    public float enumerate(String pTotal, ArrayList<Node> network) {
         System.out.println("");
-        float res1 = enumerateNum(expression, network);
+        String newPTotal = includeExpression(pTotal, this.newExpressionNum);
+        //System.out.println("new PTotal 1"  + newPTotal);
+        float res1 = enumerateExpr(newPTotal, network, this.hiddenVarsNum);
         System.out.println(res1);
         System.out.println("");
-        float res2 = enumerateDenom(expression, network);
+        newPTotal = includeExpression(pTotal, this.newExpressionDenom);
+        //System.out.println("new PTotal 2"  + newPTotal);
+        float res2 = enumerateExpr(newPTotal, network, this.hiddenVarsDenom);
         System.out.println(res2);
         return res1/res2;
     }
     
-    public float enumerateNum(String expression, ArrayList<Node> completeNetwork) {
+    public float enumerateExpr(String expression, ArrayList<Node> completeNetwork, ArrayList<String> variables) {
         float resultNum = 0;
-        int n = this.hiddenVarsNum.size();
+        int n = variables.size();
         for (int i = 0; i < Math.pow(2, n); i++) {
             String bin = Integer.toBinaryString(i);
             while (bin.length() < n)
                 bin = "0" + bin;
             char[] chars = bin.toCharArray();
             String[] str = new String[n];
-            for (int k = 0; k < this.hiddenVarsNum.size(); k++){
+            for (int k = 0; k < variables.size(); k++){
                 for (int j = 0; j < chars.length; j++) {
                     if (j == k) {
                         if (chars[j] == '0'){
-                            str[j] = this.hiddenVarsNum.get(k);
+                            str[j] = variables.get(k);
                         }
                         else{
-                             str[j] = "!"+this.hiddenVarsNum.get(k);
+                             str[j] = "!"+variables.get(k);
                         }
                     }
 
@@ -198,37 +208,6 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
             resultNum += this.evaluateExpression(newExpr, completeNetwork);
         }
         return resultNum;
-    }
-    public float enumerateDenom(String expression, ArrayList<Node> completeNetwork) {
-        float resultDenom = 0;
-        int n = this.hiddenVarsDenom.size();
-        if (n == 0) {
-            return 1;
-        }
-        for (int i = 0; i < Math.pow(2, n); i++) {
-            String bin = Integer.toBinaryString(i);
-            while (bin.length() < n)
-                bin = "0" + bin;
-            char[] chars = bin.toCharArray();
-            String[] str = new String[n];
-            for (int k = 0; k < this.hiddenVarsDenom.size(); k++){
-                for (int j = 0; j < chars.length; j++) {
-                    if (j == k) {
-                        if (chars[j] == '0'){
-                            str[j] = this.hiddenVarsDenom.get(k);
-                        }
-                        else{
-                             str[j] = "!"+this.hiddenVarsDenom.get(k);
-                        }
-                    }
-
-                }
-            }
-            System.out.println(Arrays.toString(str));
-            String newExpression = generateNewExpression(expression, new ArrayList(Arrays.asList(str)));
-            resultDenom += this.evaluateExpression(newExpression, completeNetwork);
-        }
-        return resultDenom;
     }
     
     public String generateNewExpression(String expression, ArrayList<String> vars) {
@@ -284,6 +263,25 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
         return prob;
     }
     
+    public boolean validateExpression(ArrayList<Node> newtwork) {
+        for (String str: this.allVars) {
+            if (!str.isEmpty()) {
+                boolean found = false;
+                for (Node nodo : newtwork) {
+                    if (str.trim().equals(nodo.getId())) {
+                        found = true;
+                    }
+                }
+                if (found == false) {
+                    System.out.println(this.allVars);
+                    System.out.println(str + " no existe");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     public String includeExpression(String pTotal, String expression) {
         expression = expression.replaceAll("\\s+","");
         ArrayList<String> negated = new ArrayList();
@@ -300,7 +298,7 @@ public class EnumerationVisitor extends BayesGrammarBaseVisitor {
             for (int j = 0; j < negated.size(); j++) {
                String neg = negated.get(j);
                neg = neg.replace("!", "");
-               if (ch == neg.toCharArray()[0]) {
+               if (ch == neg.toCharArray()[0] ) {
                    newVar = "!";
                }
             }
